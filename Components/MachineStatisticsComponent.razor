@@ -1,0 +1,20 @@
+﻿@page "/machinestatistics"
+@using MachineParkManagement.Models
+@inject MachineParkManagement.Services.IMachineService MachineService
+
+
+
+<h3>Machine Park Statistics</h3>
+
+<p>Total Machines: @statistics.TotalMachines</p>
+<p>Online Machines: @statistics.OnlineMachines</p>
+<p>Last Edited Machine: @statistics.LastEditedMachine</p>
+
+@code {
+    private MachineStatistics statistics = new MachineStatistics();
+
+    protected override async Task OnInitializedAsync()
+    {
+        statistics = await MachineService.GetStatisticsAsync();
+    }
+}

@@ -1,0 +1,51 @@
+﻿@page "/machines"
+@using MachineParkManagement.Models
+@inject MachineParkManagement.Services.IMachineService MachineService
+
+<h3>Machine List</h3>
+
+<!-- Table to display the list of machines -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Latest Data</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var machine in machines)
+        {
+            <tr>
+                <td>@machine.Name</td>
+                <td>@machine.Id</td>
+                <td>@machine.Status</td>
+                <td>@machine.LatestData</td>
+                <td>
+                    <!-- Button to send data to the machine -->
+                    <button class="btn btn-primary" @onclick="() => SendDataToMachine(machine.Id)">Send Data</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Machine> machines;
+
+    // On component initialization, retrieve the list of machines
+    protected override async Task OnInitializedAsync()
+    {
+      
+         machines = await MachineService.GetMachinesAsync();
+    }
+
+    // Method to send data to a specific machine
+    private async Task SendDataToMachine(Guid id)
+    {
+        await MachineService.SendDataAsync(id);
+        machines = await MachineService.GetMachinesAsync();
+    }
+}
